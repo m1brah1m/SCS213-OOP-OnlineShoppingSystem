@@ -68,7 +68,7 @@
 - [ ] Ask Seller to input his detalis (seller's info)
 - [ ] Ask Seller for his store capacity (maxNumberOfItems)
 -  Menu To Choose from:
-- [ ] 1) Print My info (print seller's info using << of **Seller* class)
+- [ ] 1) Print My info (print seller's info using << of **Seller** class)
 - [ ] 2) Add an Item
 - [ ] 3) Sell an Item
 - [ ] 4) Print Items
