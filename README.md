@@ -77,3 +77,39 @@
 
 
 
+---
+### Comments
+- [ ] Author and Purpose of the Program
+- [ ] For every function explaining what it does, Parameters it takes and return value
+- [ ] Add comments to any part that is difficult to understand
+
+---
+### Coding Style
+#### Naming:
+- [ ] Names representing methods or functions are verbs and written in mixed case starting with lower case
+- [ ] Private class variables should have underscore suffix. ex: int length_
+- [ ] Generic variables should have the same name as their type. ex: void setTopic(Topic* topic)
+- [ ] Non-generic variables have a role. These variables can often be named by combining role and type ex1: Point  startingPoint, centerPoint; ex2: Name   loginName;
+- [ ] Variables with a large scope should have long names, variables with a small scope can have short names [1]
+- [ ] The name of the object is implicit, and should be avoided in a method name  ex: line.getLength();   NOT: line.getLineLength();
+- [ ] Plural form should be used on names representing a collection of objects.
+- [ ] The prefix is should be used for boolean variables and methods. ex: isSet, isVisible, isFinished, isFound, isOpen
+- [ ] Negated boolean variable names must be avoided.
+- [ ] Abbreviations in names should be avoided.
+- [ ] Naming pointers specifically should be avoided. ex: Line* line;   NOT: Line* pLine; NOT: Line* linePtr;
+- [ ] C++ pointers and references should have their reference symbol next to the type rather than to the name ex1: float* x;  NOT: float *x;  ex2:  int& y;   NOT: int &y;
+#### Position
+- [ ] Loop variables should be initialized immediately before the loop ex: isDone = false; while(){}  NOT: bool isDone = false; while(){}
+- [ ] Complex conditional expressions must be avoided. Introduce temporary boolean variables instead
+- [ ] Executable statements in conditionals' conditions must be avoided.
+#### Other Notes
+- [ ] Floating point constants should always be written with decimal point and at least one decimal
+- [ ] "0" should be used instead of "NULL". Note: NULL is part of the standard C library, but is made obsolete in C++.
+#### Spaces
+- [ ] Commas should be followed by a white space
+- [ ] Operators should be surrounded by a space character.
+- [ ] C++ reserved words/function's name should be followed by a white space
+- [ ] Methods should be separated by three blank lines.
+- [ ] Use alignment wherever it enhances readability.
+
+https://geosoft.no/development/cppstyle.html
