@@ -242,6 +242,8 @@ class Seller
         friend ostream& operator<< (ostream& output, const Seller& seller);
         bool addAnItem(const Item&);
         bool sellAnItem(string, int);
+        void printItems();
+        Item* findAnItemByID(int);
         
         
 
@@ -343,7 +345,7 @@ bool Seller::addAnItem(const Item& item)
 
         else
         {
-            items_[indexOfItem].ID_ = item.ID_;
+            Item::countOfItems=item.ID_-1;
             items_[indexOfItem].name_ = item.name_;
             items_[indexOfItem].quantity_ = item.quantity_;
             items_[indexOfItem].price_ = item.price_;
@@ -398,10 +400,30 @@ bool Seller::sellAnItem(string itemName, int quantity)
         }
     }
 }
-
+void Seller::printItems(){
+    cout<<name_<<"'s Items :"<<endl;
+    for(int i = 0; i < maxItems_; i++)
+    {   
+        cout<<"Item "<<i+1<<" :"<<endl;
+        cout<<items_[i];
+    }
+}
+Item* Seller::findAnItemByID(int ID){
+    return &items_[ID-1];
+}
 
 int main( ){
-    
+    //Seller(string name, string email, int maxItems)
+    //Item (string name, int quantity, double price)
+    Seller seller1("Mostafa Ibrahim","mostafa@gmail.com",4);
+    // Item item1("Shoe",3,45.3);
+    seller1.addAnItem(Item("Jacket",3,245.3));
+    seller1.addAnItem(Item("Shirt",36,88));
+    seller1.addAnItem(Item("Hoodie",16,98));
+    cout<<"------"<<endl;
+    seller1.printItems();
+    cout<<"------"<<endl;
+    cout<<*(seller1.findAnItemByID(2));
     
 
     
