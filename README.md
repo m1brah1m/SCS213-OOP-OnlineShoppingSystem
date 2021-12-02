@@ -37,22 +37,22 @@
 
 #### Private:
 
-- [ ] name
-- [ ] email
-- [ ] items (dynamic array of objects of type **Item** with the size maxItems)
-- [ ] maxItems
+- [x] name
+- [x] email
+- [x] items (dynamic array of objects of type **Item** with the size maxItems)
+- [x] maxItems
 
 ### Class Methods:
 
 #### Public:
 
-- [ ] Parameterized Constructor
-- [ ] Destructor
+- [x] Parameterized Constructor
+- [x] Destructor
 - Operator Overloading
-- [ ] << (stream insertion operator)
+- [x] << (stream insertion operator)
 - _Add An Item_
-- [ ] Takes an **Item** object as a parameter
-- [ ] Function Body
+- [x] Takes an **Item** object as a parameter
+- [x] Function Body
 
   - (Use Operator == where an item is equal to another If They have the same name)
   - If the item exists Increase the item’s quantity by the quantity of the parameter item using the (+=) of **Item** class
@@ -64,8 +64,8 @@
   - false otherwise
 
 - _Sell An Item_
-- [ ] Takes item name and quantity as parameters
-- [ ] If the parameter quantity <= item's quantity then decrease it from item using the (-=) of **Item** class
+- [x] Takes item name and quantity as parameters
+- [x] If the parameter quantity <= item's quantity then decrease it from item using the (-=) of **Item** class
   - **Else :** (parameter quantity more than that of the item)
   - Print " There is only {item's quantity} left for this item "
   - **Return (boolean):**
