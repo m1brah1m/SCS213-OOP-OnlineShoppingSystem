@@ -266,16 +266,18 @@ ostream& operator<< (ostream& output, const Seller& seller)
     output << "Seller's Name: " << seller.name_ << endl;
     output << "Email: " << seller.email_ << endl;
     output << "Store Capacity: " << seller.maxItems_ << endl;
+
+    return output;
 }
 
 bool Seller::addAnItem(const Item& item)
 {
     bool isFound = false;
-    int indexOfItem = 0;
+    int indexOfItem = -1;
 
     for (int i = 0; i < maxItems_; i++)
     {
-        if (item.name_ == items_[i].name_)
+        if (items_[i] == item)
         {
             isFound = true;
             indexOfItem = i;
@@ -300,7 +302,7 @@ bool Seller::addAnItem(const Item& item)
             }
         }
 
-        if(indexOfItem == 0)
+        if(indexOfItem == -1)
         {
             cout << "There are no empty entries in items." << endl;
             //cout << "Addition of this item failed." << endl;
@@ -357,7 +359,9 @@ bool Seller::sellAnItem(string itemName, int quantity)
     }
 }
 
+
 int main( ){
+    
     
 
     
