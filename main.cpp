@@ -246,7 +246,14 @@ class Seller
         
 
 };
+/* Constructors */
 
+/* Parameterized Constructor:
+    - Doesn't return any valueb
+    What it does:
+    - Assings parameters' values to name, email, maxItems
+    - Allocate memory for the dynamically allocated array items_
+*/
 Seller::Seller(string name, string email, int maxItems)
 {
     name_ = name;
@@ -254,6 +261,13 @@ Seller::Seller(string name, string email, int maxItems)
     maxItems_= maxItems;
     items_ = new Item[maxItems];
 }
+/* Destrucor:
+    - Executed at program's termination
+    - Doesn't return any value
+    What it does:
+    - Deallocates memory of the dynamic array items
+    - Sets pointer items_ to 0
+*/
 
 Seller::~Seller()
 {
@@ -261,6 +275,14 @@ Seller::~Seller()
     items_ = 0;
 }
 
+/* 
+    Overloaded << (stream insertion operator) :
+        - friend of Item class
+        - Overloaded to print Seller's info
+        - Takes two parameters an ostream object and seller
+        - Appends to the ostream some customized messages with the seller's members
+        - ostream object is returned
+*/
 ostream& operator<< (ostream& output, const Seller& seller)
 {
     output << "Seller's Name: " << seller.name_ << endl;
@@ -269,10 +291,19 @@ ostream& operator<< (ostream& output, const Seller& seller)
 
     return output;
 }
-
+/*
+    bool addAnItem:
+        - Takes an item as a parameter
+        - Checks for the entered item
+        - If the items was found, the quantity is increased by 1 and returns true
+        - If it was not found a new entry is added and returns true
+        - Returns false otherwise
+*/
 bool Seller::addAnItem(const Item& item)
 {
     bool isFound = false;
+
+    // indexOfItem is set to -1 to avoid false detection of index 0 in the array
     int indexOfItem = -1;
 
     for (int i = 0; i < maxItems_; i++)
@@ -302,6 +333,7 @@ bool Seller::addAnItem(const Item& item)
             }
         }
 
+        // Checking if the item is not found 
         if(indexOfItem == -1)
         {
             cout << "There are no empty entries in items." << endl;
@@ -324,6 +356,14 @@ bool Seller::addAnItem(const Item& item)
     return false;
 }
 
+/*
+    bool sellAnItem:
+        - Takes an item and int quantity as parameters
+        - Checks for the entered item
+        - If the item was found and the quantity wanted is smaller than the available, function returns true
+        - If item is not found or the quantity wanted is larger than the available, the function returns false
+        
+*/
 bool Seller::sellAnItem(string itemName, int quantity)
 {
     int indexOfItem = 0;
