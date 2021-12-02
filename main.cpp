@@ -40,7 +40,8 @@ class Item{
         /*Stream Insertion and Extraction Operators Overloading*/
         friend ostream& operator<< (ostream& output, const Item& item);
         friend istream& operator>> (istream& input, Item& item);
-
+        /*Friend Classes */
+        friend class Seller;
 
 
 };
@@ -227,8 +228,134 @@ istream& operator>> (istream& input, Item& item){
     return input;
 }
 
+class Seller
+{
+    private:
+        string name_;
+        string email_;
+        int maxItems_;
+        Item* items_;
 
+    public:
+        Seller(string,string,int);
+        ~Seller();
+        friend ostream& operator<< (ostream& output, const Seller& seller);
+        bool addAnItem(const Item&);
+        bool sellAnItem(string, int);
+        
+        
 
+};
+
+Seller::Seller(string name, string email, int maxItems)
+{
+    name_ = name;
+    email_ = email;
+    maxItems_= maxItems;
+    items_ = new Item[maxItems];
+}
+
+Seller::~Seller()
+{
+    delete [] items_;
+    items_ = 0;
+}
+
+ostream& operator<< (ostream& output, const Seller& seller)
+{
+    output << "Seller's Name: " << seller.name_ << endl;
+    output << "Email: " << seller.email_ << endl;
+    output << "Store Capacity: " << seller.maxItems_ << endl;
+}
+
+bool Seller::addAnItem(const Item& item)
+{
+    bool isFound = false;
+    int indexOfItem = 0;
+
+    for (int i = 0; i < maxItems_; i++)
+    {
+        if (item.name_ == items_[i].name_)
+        {
+            isFound = true;
+            indexOfItem = i;
+        } 
+        
+    }
+
+    if (isFound)
+    {
+        items_[indexOfItem] += item;
+        return true;
+    }
+
+    else
+    {
+        for (int i = 0; i < maxItems_; i++)
+        {
+            if (items_[i].price_ == 0)
+            {
+                indexOfItem = i;
+                break;
+            }
+        }
+
+        if(indexOfItem == 0)
+        {
+            cout << "There are no empty entries in items." << endl;
+            //cout << "Addition of this item failed." << endl;
+            return false;
+        }
+
+        else
+        {
+            items_[indexOfItem].ID_ = item.ID_;
+            items_[indexOfItem].name_ = item.name_;
+            items_[indexOfItem].quantity_ = item.quantity_;
+            items_[indexOfItem].price_ = item.price_;
+
+            return true;
+        }
+        
+    }
+    
+    return false;
+}
+
+bool Seller::sellAnItem(string itemName, int quantity)
+{
+    int indexOfItem = 0;
+    bool isFound = false;
+
+    for(int i = 0; i < maxItems_; i++)
+    {
+        if(items_[i].name_ == itemName)
+        {
+            isFound = true;
+            indexOfItem = i;
+        }
+    }
+    
+    if(!isFound)
+    {
+        //cout << "Item is not found" << endl;
+        return false;
+    }
+
+    else // main
+    {
+        if(quantity <= items_[indexOfItem].quantity_)
+        {
+            items_[indexOfItem].quantity_ -= quantity;
+            return true;
+        }
+        else
+        {
+            //cout << "There is only " << items_[indexOfItem].quantity_ << "left for this item."
+            return false;
+        }
+    }
+}
 
 int main( ){
     
