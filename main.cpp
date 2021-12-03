@@ -243,7 +243,7 @@ class Seller
         bool addAnItem(const Item&);
         bool sellAnItem(string, int);
         void printItems();
-        Item* findAnItemByID(int);
+        Item* findAnItemById(int);
         
         
 
@@ -263,6 +263,7 @@ Seller::Seller(string name, string email, int maxItems)
     maxItems_= maxItems;
     items_ = new Item[maxItems];
 }
+
 /* Destrucor:
     - Executed at program's termination
     - Doesn't return any value
@@ -270,7 +271,6 @@ Seller::Seller(string name, string email, int maxItems)
     - Deallocates memory of the dynamic array items
     - Sets pointer items_ to 0
 */
-
 Seller::~Seller()
 {
     delete [] items_;
@@ -293,6 +293,7 @@ ostream& operator<< (ostream& output, const Seller& seller)
 
     return output;
 }
+
 /*
     bool addAnItem:
         - Takes an item as a parameter
@@ -400,18 +401,43 @@ bool Seller::sellAnItem(string itemName, int quantity)
         }
     }
 }
+
+/*
+    void printItems:
+        - Doesn't take any parameters
+        - Prints all non empty entries in items_ array
+        - Checks if an item is empty by comparing the price of the item to 0
+        - Doesn't return any value
+*/
 void Seller::printItems(){
     cout<<name_<<"'s Items :"<<endl;
     for(int i = 0; i < maxItems_; i++)
-    {   
-        cout<<"Item "<<i+1<<" :"<<endl;
-        cout<<items_[i];
+    {   if (items_[i].price_ != 0)
+        {
+            cout<<"Item "<<i+1<<" :"<<endl;
+            cout<<items_[i];
+            cout << endl;
+        }
+    
+        
     }
 }
-Item* Seller::findAnItemByID(int ID){
+
+/*
+    Item* findAnItemById
+        - Takes an int as a parameter
+        - Returns a pointer to the item with the same ID  
+*/
+Item* Seller::findAnItemById(int ID){
     return &items_[ID-1];
 }
 
+/*
+    bool validateUserIntegerInput:
+        - Takes 4 parameters: referenced string, referenced int, a string, and an int
+        - Validates that the referenced string contains only characters from the string parameter
+        - Converts the string to the referenced int if the string is valid
+*/
 bool validateUserIntegerInput(string& inputText, int& convertedText, string customAllowedCharacters, string customInvalidMessage)
 {
     for(int i=0;i<inputText.length();i++)
@@ -430,6 +456,9 @@ bool validateUserIntegerInput(string& inputText, int& convertedText, string cust
     // Return statement to avoid warning from the compiler, code runs normally without it.
     return false;
 }
+
+
+
 int main()
 {   
     
@@ -460,64 +489,145 @@ int main()
         "4) Print Items\n"
         "5) Find an Item by ID\n"
         "6) Exit\n";
+
+        cout << endl;
         
-        bool isChoiceValid;
+        bool isChoiceValid = false;
         string choice;
         int readyForUseChoice;
 
         cout<<"Choice: ";
         cin>>choice;
+        cin.clear();
+        cin.ignore(1000,'\n');
 
-        if(choice.length() == 1)
-        {
-            isChoiceValid=validateUserIntegerInput(choice, readyForUseChoice, "123456", "Invalid Choice! Please choose from the menu!");
-        }
-        else
-        {
-            cout<<"Invalid Choice! Please choose from the menu!"<<endl;
-            isChoiceValid=false;
-        }
+        cout << endl;
 
-        if (isChoiceValid)  
+        // While loop for input validation
+        while (!isChoiceValid)
         {
-            switch (readyForUseChoice)
-            {
-                case 1:
-                {
-                    cout<<"Print my info"<<endl;
-                    break;
-                }
-                case 2:
-                {
-                    cout<<"ADD"<<endl;
-                    break;
-                }
-                case 3: 
-                {
-                    cout<<"SELL"<<endl;
-                    break;
-                }
-                case 4: 
-                {
-                    cout<<"Print items"<<endl;
-                    break;
-                }
-                case 5: 
-                {    
-                    cout<<"find by ID"<<endl;
-                    break;
-                }
-               
-                case 6:
-                {   
-                    cout<<"Exit"<<endl;
-                    isProgramRunning = false;
-                    
-                    break;
-                }
             
+            if(choice.length() == 1)
+            {
+                // Using the custom function to validate input
+                isChoiceValid=validateUserIntegerInput(choice, readyForUseChoice, "123456", "Invalid Choice! Please choose from the menu!");
             }
+            else
+            {
+                cout<<"Invalid Choice! Please choose from the menu!"<<endl;
+                isChoiceValid=false;
+
+                cout<<"Choice: ";
+                cin>>choice;
+                cin.clear();
+                cin.ignore(1000,'\n');
+
+                cout << endl;
+            }
+
+            
         }
+
+        switch (readyForUseChoice)
+        {
+            // Prints seller's info
+            case 1:
+            {
+                cout << seller;
+                break;
+            }
+
+            // Adds an item
+            case 2:
+            {
+                string itemName;
+                int itemQuantity;
+                double itemPrice;
+                bool isExecutedCorrectly = false;
+
+                cout << "Enter Item Name: ";
+                cin >> itemName;
+
+                cout << "Enter Item Quantity: ";
+                cin >> itemQuantity;
+
+                cout << "Enter Item Price: ";
+                cin >> itemPrice;
+
+                Item newItem(itemName, itemQuantity, itemPrice);
+
+                isExecutedCorrectly = seller.addAnItem(newItem);
+
+                if(!isExecutedCorrectly)
+                {
+                    cout << "Process not executed correctly." << endl;
+                    cout << "Please try again." << endl;
+                
+                }
+                else
+                {
+                    cout << "The item was added successfully." << endl;
+                }
+
+                break;
+            }
+            // Sell an item
+            case 3: 
+            {
+                string itemName;
+                int itemQuantity;
+                bool isExecutedCorrectly = false;
+
+                cout << "Enter Item Name: ";
+                cin >> itemName;
+
+                cout << "Enter Item Quantity: ";
+                cin >> itemQuantity;
+
+                isExecutedCorrectly = seller.sellAnItem(itemName, itemQuantity);
+
+                if(!isExecutedCorrectly)
+                {
+                    cout << "Process not executed correctly." << endl;
+                    cout << "Please try again.";
+                
+                }
+                else
+                {
+                    cout << "The process was completed successfully." << endl;
+                }
+                break;
+            }
+
+            // Print items
+            case 4: 
+            {
+                seller.printItems();
+                break;
+            }
+
+            // Search for an item with it's ID
+            case 5: 
+            {   
+                int id;
+
+                cout << "Enter ID of the required Item: " ;
+                cin >> id;
+
+                cout << (*seller.findAnItemById(id));
+                break;
+            }
+               
+            case 6:
+            {   
+                cout<<"Exit!"<<endl;
+                isProgramRunning = false;
+                
+                break;
+            }
+            
+        }
+        
     
 
         }
