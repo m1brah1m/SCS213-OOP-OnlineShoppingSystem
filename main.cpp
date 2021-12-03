@@ -412,21 +412,119 @@ Item* Seller::findAnItemByID(int ID){
     return &items_[ID-1];
 }
 
-int main( ){
-    //Seller(string name, string email, int maxItems)
-    //Item (string name, int quantity, double price)
-    Seller seller1("Mostafa Ibrahim","mostafa@gmail.com",4);
-    // Item item1("Shoe",3,45.3);
-    seller1.addAnItem(Item("Jacket",3,245.3));
-    seller1.addAnItem(Item("Shirt",36,88));
-    seller1.addAnItem(Item("Hoodie",16,98));
-    cout<<"------"<<endl;
-    seller1.printItems();
-    cout<<"------"<<endl;
-    cout<<*(seller1.findAnItemByID(2));
+bool validateUserIntegerInput(string& inputText, int& convertedText, string customAllowedCharacters, string customInvalidMessage)
+{
+    for(int i=0;i<inputText.length();i++)
+    {
+        if(customAllowedCharacters.find(inputText[i])!=string::npos)
+        {
+            convertedText=stoi(inputText);
+            return true;
+        }
+        else
+        {
+            cout<<customInvalidMessage<<endl;
+            return false;
+        }
+    }
+    // Return statement to avoid warning from the compiler, code runs normally without it.
+    return false;
+}
+int main()
+{   
+    
+    string name, email;
+    int maxItems;
+    cout<<"Seller's name: "<<endl;
+    cin>>name;
+    cout<<"Seller's email: "<<endl;
+    cin>>email;
+    cout<<"Store Capacity: "<<endl;
+    cin>>maxItems;
+
+    Seller seller(name, email, maxItems);
+
+
     
 
     
-   return 0; 
+    bool isProgramRunning = true;      
+    while (isProgramRunning)
+    {
+        cout<<
+        "\n"
+        "Choose from this menu: \n"
+        "1) Print My Info\n"
+        "2) Add An Item\n"
+        "3) Sell An Item\n"
+        "4) Print Items\n"
+        "5) Find an Item by ID\n"
+        "6) Exit\n";
+        
+        bool isChoiceValid;
+        string choice;
+        int readyForUseChoice;
+
+        cout<<"Choice: ";
+        cin>>choice;
+
+        if(choice.length() == 1)
+        {
+            isChoiceValid=validateUserIntegerInput(choice, readyForUseChoice, "123456", "Invalid Choice! Please choose from the menu!");
+        }
+        else
+        {
+            cout<<"Invalid Choice! Please choose from the menu!"<<endl;
+            isChoiceValid=false;
+        }
+
+        if (isChoiceValid)  
+        {
+            switch (readyForUseChoice)
+            {
+                case 1:
+                {
+                    cout<<"Print my info"<<endl;
+                    break;
+                }
+                case 2:
+                {
+                    cout<<"ADD"<<endl;
+                    break;
+                }
+                case 3: 
+                {
+                    cout<<"SELL"<<endl;
+                    break;
+                }
+                case 4: 
+                {
+                    cout<<"Print items"<<endl;
+                    break;
+                }
+                case 5: 
+                {    
+                    cout<<"find by ID"<<endl;
+                    break;
+                }
+               
+                case 6:
+                {   
+                    cout<<"Exit"<<endl;
+                    isProgramRunning = false;
+                    
+                    break;
+                }
+            
+            }
+        }
     
+
+        }
+    
+
+     
+    
+    
+    return 0;
 }
