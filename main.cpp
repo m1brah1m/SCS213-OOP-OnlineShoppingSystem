@@ -297,18 +297,19 @@ ostream& operator<< (ostream& output, const Seller& seller)
 /*
     bool addAnItem:
         - Takes an item as a parameter
-        - Checks for the entered item
+        - Searches for the entered item
         - If the items was found, the quantity is increased by 1 and returns true
         - If it was not found a new entry is added and returns true
         - Returns false otherwise
 */
 bool Seller::addAnItem(const Item& item)
 {
-    bool isFound = false;
+    bool isFound;
 
     // indexOfItem is set to -1 to avoid false detection of index 0 in the array
     int indexOfItem = -1;
 
+    isFound = false;
     for (int i = 0; i < maxItems_; i++)
     {
         if (items_[i] == item)
@@ -396,7 +397,7 @@ bool Seller::sellAnItem(string itemName, int quantity)
         }
         else
         {
-            //cout << "There is only " << items_[indexOfItem].quantity_ << "left for this item."
+            cout << "There is only " << items_[indexOfItem].quantity_ << " left for this item." << endl;
             return false;
         }
     }
@@ -414,7 +415,7 @@ void Seller::printItems(){
     for(int i = 0; i < maxItems_; i++)
     {   if (items_[i].price_ != 0)
         {
-            cout<<"Item "<<i+1<<" :"<<endl;
+            cout<<"-Item "<<i+1<<" :"<<endl;
             cout<<items_[i];
             cout << endl;
         }
@@ -428,8 +429,20 @@ void Seller::printItems(){
         - Takes an int as a parameter
         - Returns a pointer to the item with the same ID  
 */
-Item* Seller::findAnItemById(int ID){
-    return &items_[ID-1];
+Item* Seller::findAnItemById(int id){
+    if (id >= 1 && id <= Item::countOfItems)
+    {
+        return &items_[id-1];
+    }
+    
+    else
+    {
+        cout << "Please enter a correct ID and try again." << endl;
+
+        // To avoid compiler errors of not returning a value to a non-void function
+        return 0;
+    }
+    
 }
 
 /*
@@ -464,20 +477,31 @@ int main()
     
     string name, email;
     int maxItems;
-    cout<<"Seller's name: "<<endl;
+    bool isProgramRunning;
+    cout<<"Seller's name: ";
     cin>>name;
-    cout<<"Seller's email: "<<endl;
+    cout<<"Seller's email: ";
     cin>>email;
-    cout<<"Store Capacity: "<<endl;
+    cout<<"Store Capacity: ";
     cin>>maxItems;
+    
+    // Checking the input is valid
+    while(!cin)
+    {
+        // Clearing cin buffer
+        cin.clear();
+        cin.ignore(1000,'\n');
+
+        cout << "Please enter a number." << endl;
+
+        cout<<"Store Capacity: ";
+        cin>>maxItems;
+    }
+
 
     Seller seller(name, email, maxItems);
 
-
-    
-
-    
-    bool isProgramRunning = true;      
+    isProgramRunning = true;      
     while (isProgramRunning)
     {
         cout<<
@@ -490,9 +514,8 @@ int main()
         "5) Find an Item by ID\n"
         "6) Exit\n";
 
-        cout << endl;
         
-        bool isChoiceValid = false;
+        bool isChoiceValid;
         string choice;
         int readyForUseChoice;
 
@@ -503,6 +526,7 @@ int main()
 
         cout << endl;
 
+        isChoiceValid = false;
         // While loop for input validation
         while (!isChoiceValid)
         {
@@ -541,8 +565,10 @@ int main()
             case 2:
             {
                 string itemName;
+
                 int itemQuantity;
-                double itemPrice;
+                double itemPrice; // double??
+
                 bool isExecutedCorrectly = false;
 
                 cout << "Enter Item Name: ";
@@ -551,8 +577,34 @@ int main()
                 cout << "Enter Item Quantity: ";
                 cin >> itemQuantity;
 
+                // Checking if the input is valid
+                while(!cin)
+                {
+                    // Clearing cin buffer
+                    cin.clear();
+                    cin.ignore(1000,'\n');
+
+                    cout << "Please enter a number." << endl;
+
+                    cout << "Enter Item Quantity: ";
+                    cin >> itemQuantity;
+                }
+            
                 cout << "Enter Item Price: ";
                 cin >> itemPrice;
+
+                while(!cin)
+                {
+                    // Clearing cin buffer
+                    cin.clear();
+                    cin.ignore(1000,'\n');
+
+                    cout << "Please enter a number." << endl;
+
+                    cout << "Enter Item Price: ";
+                    cin >> itemPrice;
+                }
+                
 
                 Item newItem(itemName, itemQuantity, itemPrice);
 
@@ -584,12 +636,26 @@ int main()
                 cout << "Enter Item Quantity: ";
                 cin >> itemQuantity;
 
+                while(!cin)
+                {
+                    // Clearing cin buffer
+                    cin.clear();
+                    cin.ignore(1000,'\n');
+
+                    cout << "Please enter a number." << endl;
+
+                    cout << "Enter Item Quantity: ";
+                    cin >> itemQuantity;
+
+                }
+            
+
                 isExecutedCorrectly = seller.sellAnItem(itemName, itemQuantity);
 
                 if(!isExecutedCorrectly)
                 {
                     cout << "Process not executed correctly." << endl;
-                    cout << "Please try again.";
+                    cout << "Please try again." << endl;
                 
                 }
                 else
@@ -613,6 +679,19 @@ int main()
 
                 cout << "Enter ID of the required Item: " ;
                 cin >> id;
+
+                while (!cin)
+                {
+                    // Clearing cin buffer
+                    cin.clear();
+                    cin.ignore(1000,'\n');
+
+                    cout << "Please enter a number." << endl;
+
+                    cout << "Enter ID of the required Item: ";
+                    cin >> id;
+
+                }
 
                 cout << (*seller.findAnItemById(id));
                 break;
