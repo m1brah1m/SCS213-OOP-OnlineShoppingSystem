@@ -400,9 +400,14 @@ bool Seller::sellAnItem(string itemName, int quantity)
             items_[indexOfItem].quantity_ -= quantity;
             return true;
         }
-        else
+        else if (items_[indexOfItem].quantity_ !=0)
         {
             cout << "There is only " << items_[indexOfItem].quantity_ << " left for this item." << endl;
+            return false;
+        }
+        else
+        {
+            cout << "This item is sold out." << endl;
             return false;
         }
     }
@@ -476,6 +481,53 @@ bool validateUserIntegerInput(string& inputText, int& convertedText, string cust
 }
 
 
+/*
+    void checkinput:
+        - Takes a referenced int as a parameter
+        - Doesn't return any value
+        - Checks if input is an integer and is a positive number
+*/
+void checkinput(int& input)
+{
+    // A goto statement to be executed when the user inputs a letter then a number
+    inputIsNumeric:
+    while (input <= 0)    
+    {   
+        // Clearing cin buffer
+        cin.clear();
+        cin.ignore(1000,'\n');
+
+        cout << "Please enter a positive number." << endl;
+
+        cout << "Input: ";
+        cin >> input;
+
+        // Loop breaks if the input is a non-integer
+        if(!cin)
+        {
+            break;
+        }
+    }
+
+    while(!cin)
+    {
+        cin.clear();
+        cin.ignore(1000,'\n');
+
+        cout << "Please enter a number." << endl;
+
+        cout << "Input: ";
+        cin >> input;
+
+        // goto inputIsNumeric if the user enters an integer
+        if(cin)
+        {
+            goto inputIsNumeric;
+        }
+    }
+}
+
+
 
 int main()
 {   
@@ -491,19 +543,7 @@ int main()
     cout<<"Store Capacity: ";
     cin>>maxItems;
     
-    // Checking the input is valid
-    while(!cin)
-    {
-        // Clearing cin buffer
-        cin.clear();
-        cin.ignore(1000,'\n');
-
-        cout << "Please enter a number." << endl;
-
-        cout<<"Store Capacity: ";
-        cin>>maxItems;
-    }
-
+    checkinput(maxItems);
 
     Seller seller(name, email, maxItems);
 
@@ -585,21 +625,14 @@ int main()
                 cout << "Enter Item Name: ";
                 cin >> itemName;
 
+                cin.clear();
+                cin.ignore(1000,'\n');
+
                 cout << "Enter Item Quantity: ";
                 cin >> itemQuantity;
 
-                // Checking if the input is valid
-                while(!cin)
-                {
-                    // Clearing cin buffer
-                    cin.clear();
-                    cin.ignore(1000,'\n');
-
-                    cout << "Please enter a number." << endl;
-
-                    cout << "Enter Item Quantity: ";
-                    cin >> itemQuantity;
-                }
+                // Calling function to validate the input
+                checkinput(itemQuantity);
             
                 cout << "Enter Item Price: ";
                 cin >> itemPrice;
@@ -641,25 +674,20 @@ int main()
                 int itemQuantity;
                 bool isExecutedCorrectly = false;
 
+                if (occupiedSlots == 0)
+                {
+                    cout << "Store is empty." << endl;
+                    break;
+                }
+                
+
                 cout << "Enter Item Name: ";
                 cin >> itemName;
 
                 cout << "Enter Item Quantity: ";
                 cin >> itemQuantity;
 
-                while(!cin)
-                {
-                    // Clearing cin buffer
-                    cin.clear();
-                    cin.ignore(1000,'\n');
-
-                    cout << "Please enter a number." << endl;
-
-                    cout << "Enter Item Quantity: ";
-                    cin >> itemQuantity;
-
-                }
-            
+                checkinput(itemQuantity);
 
                 isExecutedCorrectly = seller.sellAnItem(itemName, itemQuantity);
 
@@ -679,8 +707,17 @@ int main()
             // Print items
             case 4: 
             {
-                seller.printItems();
-                break;
+                if (occupiedSlots == 0)
+                {
+                    cout << "Store is empty." << endl;
+                    break;
+                }
+                else
+                {
+                    seller.printItems();
+                    break;
+                }
+                
             }
 
             // Search for an item with it's ID
@@ -688,6 +725,12 @@ int main()
             {   
                 int id;
 
+                if (occupiedSlots == 0)
+                {
+                    cout << "Store is empty." << endl;
+                    break;
+                }
+                
                 cout << "Enter ID of the required Item: " ;
                 cin >> id;
                 if(id>Item::getCountOfItems()){
