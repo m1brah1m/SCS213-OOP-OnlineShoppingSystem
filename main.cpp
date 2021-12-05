@@ -42,10 +42,15 @@ class Item{
         friend istream& operator>> (istream& input, Item& item);
         /*Friend Classes */
         friend class Seller;
+        /*Static member function to get countOfItems*/
+        static int getCountOfItems();
 
 
 };
 int Item::countOfItems = 0;
+int Item::getCountOfItems(){
+    return countOfItems;
+}
                         /* Constructors */
 
 /* Default Constructor:
@@ -476,7 +481,8 @@ int main()
 {   
     
     string name, email;
-    int maxItems;
+    int maxItems,occupiedSlots;
+    occupiedSlots=0;
     bool isProgramRunning;
     cout<<"Seller's name: ";
     cin>>name;
@@ -564,13 +570,18 @@ int main()
             // Adds an item
             case 2:
             {
+
                 string itemName;
 
                 int itemQuantity;
                 double itemPrice; // double??
 
                 bool isExecutedCorrectly = false;
-
+                
+                if(occupiedSlots==maxItems){
+                    cout<<"Store reached its maximum capacity."<<endl;
+                    break;
+                }
                 cout << "Enter Item Name: ";
                 cin >> itemName;
 
@@ -620,7 +631,7 @@ int main()
                 {
                     cout << "The item was added successfully." << endl;
                 }
-
+                occupiedSlots++;
                 break;
             }
             // Sell an item
@@ -679,6 +690,10 @@ int main()
 
                 cout << "Enter ID of the required Item: " ;
                 cin >> id;
+                if(id>Item::getCountOfItems()){
+                    cout<<"ID not found."<<endl;
+                    break;
+                }
 
                 while (!cin)
                 {
@@ -690,10 +705,18 @@ int main()
 
                     cout << "Enter ID of the required Item: ";
                     cin >> id;
-
+                    if(id>Item::getCountOfItems()){
+                        cout<<"ID not found."<<endl;
+                        break;
+                    }
+                    else{
+                        cout << (*seller.findAnItemById(id));
+                        break;
+                    }
+                    
                 }
 
-                cout << (*seller.findAnItemById(id));
+                
                 break;
             }
                
