@@ -352,7 +352,12 @@ bool Seller::addAnItem(const Item& item)
 
         else
         {
-            Item::countOfItems=item.ID_-1;
+            cout<<"Before setting of (the allocated object in the array) 's members using the passed instance,The ID : "<<item.ID_<<endl;//trace
+            cout<<"Before setting of (the allocated object in the array) 's members using the passed instance,The Count of Items : "<<Item::countOfItems<<endl;//trace
+            Item::countOfItems=Item::countOfItems-1;
+            cout<<"After setting of (the allocated object in the array) 's members using the passed instance,The Count of Items : "<<Item::countOfItems<<endl;//trace
+            cout<<"The actual maxItems (Capacity/Array's size): "<<this->maxItems_<<endl;//trace
+            cout<<"Now there is no duplication and count of items are back to its actual value which is the allocated/maxItems/Capacity"<<endl; //trace
             items_[indexOfItem].name_ = item.name_;
             items_[indexOfItem].quantity_ = item.quantity_;
             items_[indexOfItem].price_ = item.price_;
@@ -649,8 +654,9 @@ int main()
                     cin >> itemPrice;
                 }
                 
-
+                cout<<"Before creation of instance in main, the one that is passed to the function: "<<Item::getCountOfItems()<<endl; //trace
                 Item newItem(itemName, itemQuantity, itemPrice);
+                cout<<"After creation of instance in main, the one that is passed to the function: "<<Item::getCountOfItems()<<endl;  //trace
 
                 isExecutedCorrectly = seller.addAnItem(newItem);
 
@@ -737,7 +743,9 @@ int main()
                     cout<<"ID not found."<<endl;
                     break;
                 }
-
+                if(cin){
+                    cout << (*seller.findAnItemById(id));
+                }
                 while (!cin)
                 {
                     // Clearing cin buffer
@@ -752,12 +760,15 @@ int main()
                         cout<<"ID not found."<<endl;
                         break;
                     }
+                    
                     else{
+                        
                         cout << (*seller.findAnItemById(id));
                         break;
                     }
                     
                 }
+                
 
                 
                 break;
