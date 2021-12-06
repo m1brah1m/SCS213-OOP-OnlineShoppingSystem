@@ -1,3 +1,11 @@
+/*
+    Authors: 1- Youssef Mohamed Emam, 20205031, SG1
+             2- Mostafa Ibrahim Abdellatif, 20205006, SG1
+
+    Purpose:    This program is an online shopping system. The user enters his info then he/she is prompted to add or sell items,
+              search for a specific item by id, print all items, print his/her info.
+*/
+
 #include <iostream>
 #include <string>
 
@@ -293,7 +301,7 @@ Seller::~Seller()
 */
 ostream& operator<< (ostream& output, const Seller& seller)
 {
-    output << "Seller's Name: " << seller.name_ << endl;
+    output << "\nSeller's Name: " << seller.name_ << endl;
     output << "Email: " << seller.email_ << endl;
     output << "Store Capacity: " << seller.maxItems_ << endl;
 
@@ -422,10 +430,13 @@ bool Seller::sellAnItem(string itemName, int quantity)
         - Checks if an item is empty by comparing the price of the item to 0
         - Doesn't return any value
 */
-void Seller::printItems(){
+void Seller::printItems()
+{
     cout<<name_<<"'s Items :"<<endl;
+
     for(int i = 0; i < maxItems_; i++)
-    {   if (items_[i].price_ != 0)
+    {   
+        if (items_[i].price_ != 0)
         {
             cout<<"-Item "<<i+1<<" :"<<endl;
             cout<<items_[i];
@@ -447,42 +458,12 @@ Item* Seller::findAnItemById(int id){
         return &items_[id-1];
     }
     
-    else
+    else 
     {
-        cout << "Please enter a correct ID and try again." << endl;
-
-        // To avoid compiler errors of not returning a value to a non-void function
         return 0;
     }
     
 }
-
-/*
-    bool validateUserIntegerInput:
-        - Takes 4 parameters: referenced string, referenced int, a string, and a string
-        - Validates that the referenced string contains only characters from the string parameter (customAllowedCharacters)
-        - Converts the string to the referenced int if the string is valid
-        - If the input is not found in the customAllowedCharacters then customInvalidMessage will be printed
-*/
-bool validateUserIntegerInput(string& inputText, int& convertedText, string customAllowedCharacters, string customInvalidMessage)
-{
-    for(int i=0;i<inputText.length();i++)
-    {
-        if(customAllowedCharacters.find(inputText[i])!=string::npos)
-        {
-            convertedText=stoi(inputText);
-            return true;
-        }
-        else
-        {
-            cout<<customInvalidMessage<<endl;
-            return false;
-        }
-    }
-    // Return statement to avoid warning from the compiler, code runs normally without it.
-    return false;
-}
-
 
 /*
     void checkinput:
@@ -490,15 +471,14 @@ bool validateUserIntegerInput(string& inputText, int& convertedText, string cust
         - Doesn't return any value
         - Checks if input is an integer and is a positive number
 */
-void checkinput(int& input)
+void checkInput(int& input)
 {
     // A goto statement to be executed when the user inputs a letter then a number
     inputIsNumeric:
-    while (input <= 0)    
+
+    // while (cin): checks if the input is the required type, returns false if the user entered a differnet type, true otherwise
+    while (cin && input <= 0)    
     {   
-        // Clearing cin buffer
-        cin.clear();
-        cin.ignore(1000,'\n');
 
         cout << "Please enter a positive number." << endl;
 
@@ -515,7 +495,7 @@ void checkinput(int& input)
     while(!cin)
     {
         cin.clear();
-        cin.ignore(1000,'\n');
+        cin.ignore(10,'\n');
 
         cout << "Please enter a number." << endl;
 
@@ -523,6 +503,50 @@ void checkinput(int& input)
         cin >> input;
 
         // goto inputIsNumeric if the user enters an integer
+        if(cin)
+        {
+            goto inputIsNumeric;
+        }
+    }
+}
+
+/*
+    void checkPrice:
+        - Takes a referenced double as a parameter
+        - Doesn't return any value
+        - Checks if input is a double and is a positive number
+        - Uses same logic as checkInput() function
+*/
+void checkPrice(double& input)
+{
+    // A goto statement to be executed when the user inputs a letter then a number
+    inputIsNumeric:
+    while (cin && input <= 0)    
+    {   
+
+        cout << "Please enter a positive number." << endl;
+
+        cout << "Input: ";
+        cin >> input;
+
+        // Loop breaks if the input is not double
+        if(!cin)
+        {
+            break;
+        }
+    }
+
+    while(!cin)
+    {
+        cin.clear();
+        cin.ignore(10,'\n');
+
+        cout << "Please enter a number." << endl;
+
+        cout << "Input: ";
+        cin >> input;
+
+        // goto inputIsNumeric if the user enters a double
         if(cin)
         {
             goto inputIsNumeric;
@@ -539,38 +563,50 @@ int main()
     int maxItems,occupiedSlots;
     occupiedSlots=0;
     bool isProgramRunning;
+
     cout<<"\nSeller's name: ";
-    cin>>name;
+    getline(cin, name); 
+
     cout<<"Seller's email: ";
-    cin>>email;
+    getline(cin, email);
+
     cout<<"Store Capacity: ";
     cin>>maxItems;
     
-    checkinput(maxItems);
+    // Using custom function to validate input
+    checkInput(maxItems);
 
     Seller seller(name, email, maxItems);
     
     string menuDisplayChoice;
     string horizontalLine(90,'_');//This is used just to separate outputs in the console (after each iteration)
-    int loopCount=0;  
+    int loopCount;
+
+    loopCount=0; 
     isProgramRunning = true;      
     while (isProgramRunning)
     {
-        if(loopCount != 0){
+        if(loopCount != 0)
+        {
             cout<<"\n\nDo you want the choice menu to be displayed again? (y/n)     Note: y for yes and n for no\n"
             "Enter (y/n): ";
+
             cin>>menuDisplayChoice;
             cout<<"\n";
-            while(menuDisplayChoice != "y" && menuDisplayChoice != "Y" && menuDisplayChoice != "n" && menuDisplayChoice != "N"){
+
+            while(menuDisplayChoice != "y" && menuDisplayChoice != "Y" && menuDisplayChoice != "n" && menuDisplayChoice != "N")
+            {
                 cout<<"\nInvalid Choice.\n"
-                "Enter (y/n): \n";
+                "Enter (y/n): ";
                 cin>>menuDisplayChoice;
             }
+
             cout<<horizontalLine<<endl;
             cout<<"\n";
         }
         
-        if(loopCount == 0 || menuDisplayChoice == "y" || menuDisplayChoice == "Y"){
+        if(loopCount == 0 || menuDisplayChoice == "y" || menuDisplayChoice == "Y")
+        {
             cout<<
             "\n"
             "Choose from this menu: \n"
@@ -581,44 +617,28 @@ int main()
             "5) Find an Item by ID\n"
             "6) Exit\n";
         }
-        bool isChoiceValid;
-        string choice;
-        int readyForUseChoice;
+
+        int choice;
 
         cout<<"Choice: ";
         cin>>choice;
-        cin.clear();
-        cin.ignore(1000,'\n');
-
+        
         cout << endl;
 
-        isChoiceValid = false;
-        // While loop for input validation
-        while (!isChoiceValid)
+    
+         checkInput(choice);
+
+        if (choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5 && choice != 6)
         {
-            
-            if(choice.length() == 1)
-            {
-                // Using the custom function to validate input
-                isChoiceValid=validateUserIntegerInput(choice, readyForUseChoice, "123456", "Invalid Choice! Please choose from the menu!");
-            }
-            else
-            {
-                cout<<"Invalid Choice! Please choose from the menu!"<<endl;
-                isChoiceValid=false;
-
-                cout<<"Choice: ";
-                cin>>choice;
-                cin.clear();
-                cin.ignore(1000,'\n');
-
-                cout << endl;
-            }
-
-            
+            cout << "Invalid Choice!" << endl;
         }
 
-        switch (readyForUseChoice)
+            
+            
+        
+        
+
+        switch (choice)
         {
             // Prints seller's info
             case 1:
@@ -638,37 +658,29 @@ int main()
 
                 bool isExecutedCorrectly = false;
                 
-                if(occupiedSlots==maxItems){
+               /* if(occupiedSlots == maxItems)
+                {
                     cout<<"Store reached its maximum capacity."<<endl;
                     break;
-                }
-                cout << "Enter Item Name: ";
-                cin >> itemName;
+                }*/
 
                 cin.clear();
-                cin.ignore(1000,'\n');
+                cin.ignore(10,'\n');
+
+                cout << "Enter Item Name: ";
+                getline(cin, itemName);
 
                 cout << "Enter Item Quantity: ";
                 cin >> itemQuantity;
 
                 // Calling function to validate the input
-                checkinput(itemQuantity);
+                checkInput(itemQuantity);
             
                 cout << "Enter Item Price: ";
                 cin >> itemPrice;
 
-                while(!cin)
-                {
-                    // Clearing cin buffer
-                    cin.clear();
-                    cin.ignore(1000,'\n');
-
-                    cout << "Please enter a number." << endl;
-
-                    cout << "Enter Item Price: ";
-                    cin >> itemPrice;
-                }
-                
+                // Calling function to validate the input
+                checkPrice(itemPrice);
                 
                 Item newItem(itemName, itemQuantity, itemPrice);
 
@@ -680,10 +692,11 @@ int main()
                     cout << "Please try again." << endl;
                 
                 }
-                else
+                else if (isExecutedCorrectly)
                 {
                     cout << "The item was added successfully." << endl;
                 }
+                
                 occupiedSlots++;
                 break;
             }
@@ -700,14 +713,15 @@ int main()
                     break;
                 }
                 
-
+                cin.clear();
+                cin.ignore(10,'\n');
                 cout << "Enter Item Name: ";
-                cin >> itemName;
+                getline(cin, itemName);
 
                 cout << "Enter Item Quantity: ";
                 cin >> itemQuantity;
 
-                checkinput(itemQuantity);
+                checkInput(itemQuantity);
 
                 isExecutedCorrectly = seller.sellAnItem(itemName, itemQuantity);
 
@@ -753,37 +767,20 @@ int main()
                 
                 cout << "Enter ID of the required Item: " ;
                 cin >> id;
-                if(id>Item::getCountOfItems()){
-                    cout<<"ID not found."<<endl;
+
+                checkInput(id);
+
+                if(id>Item::getCountOfItems())
+                {
+                    cout<<"ID not found.\n"
+                        << "Please enter a valid ID and try again." << endl;
                     break;
                 }
-                if(cin){
+
+                else
+                {
                     cout << (*seller.findAnItemById(id));
                 }
-                while (!cin)
-                {
-                    // Clearing cin buffer
-                    cin.clear();
-                    cin.ignore(1000,'\n');
-
-                    cout << "Please enter a number." << endl;
-
-                    cout << "Enter ID of the required Item: ";
-                    cin >> id;
-                    if(id>Item::getCountOfItems()){
-                        cout<<"ID not found."<<endl;
-                        break;
-                    }
-                    
-                    else{
-                        
-                        cout << (*seller.findAnItemById(id));
-                        break;
-                    }
-                    
-                }
-                
-
                 
                 break;
             }
@@ -795,6 +792,7 @@ int main()
                 
                 break;
             }
+            
             
         }
         
