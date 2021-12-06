@@ -47,6 +47,7 @@ class Item{
 
 
 };
+/*Static member variable that holds the count of items and a static member function that returns the count value*/
 int Item::countOfItems = 0;
 int Item::getCountOfItems(){
     return countOfItems;
@@ -346,18 +347,14 @@ bool Seller::addAnItem(const Item& item)
         if(indexOfItem == -1)
         {
             cout << "There are no empty entries in items." << endl;
-            //cout << "Addition of this item failed." << endl;
             return false;
         }
 
         else
         {
-            cout<<"Before setting of (the allocated object in the array) 's members using the passed instance,The ID : "<<item.ID_<<endl;//trace
-            cout<<"Before setting of (the allocated object in the array) 's members using the passed instance,The Count of Items : "<<Item::countOfItems<<endl;//trace
+            //Changing the count of items to its correct value again, due to duplication occured because of creation of the instance that is passed to the function
             Item::countOfItems=Item::countOfItems-1;
-            cout<<"After setting of (the allocated object in the array) 's members using the passed instance,The Count of Items : "<<Item::countOfItems<<endl;//trace
-            cout<<"The actual maxItems (Capacity/Array's size): "<<this->maxItems_<<endl;//trace
-            cout<<"Now there is no duplication and count of items are back to its actual value which is the allocated/maxItems/Capacity"<<endl; //trace
+
             items_[indexOfItem].name_ = item.name_;
             items_[indexOfItem].quantity_ = item.quantity_;
             items_[indexOfItem].price_ = item.price_;
@@ -394,7 +391,7 @@ bool Seller::sellAnItem(string itemName, int quantity)
     
     if(!isFound)
     {
-        //cout << "Item is not found" << endl;
+        
         return false;
     }
 
@@ -462,9 +459,10 @@ Item* Seller::findAnItemById(int id){
 
 /*
     bool validateUserIntegerInput:
-        - Takes 4 parameters: referenced string, referenced int, a string, and an int
-        - Validates that the referenced string contains only characters from the string parameter
+        - Takes 4 parameters: referenced string, referenced int, a string, and a string
+        - Validates that the referenced string contains only characters from the string parameter (customAllowedCharacters)
         - Converts the string to the referenced int if the string is valid
+        - If the input is not found in the customAllowedCharacters then customInvalidMessage will be printed
 */
 bool validateUserIntegerInput(string& inputText, int& convertedText, string customAllowedCharacters, string customInvalidMessage)
 {
@@ -541,7 +539,7 @@ int main()
     int maxItems,occupiedSlots;
     occupiedSlots=0;
     bool isProgramRunning;
-    cout<<"Seller's name: ";
+    cout<<"\nSeller's name: ";
     cin>>name;
     cout<<"Seller's email: ";
     cin>>email;
@@ -551,21 +549,38 @@ int main()
     checkinput(maxItems);
 
     Seller seller(name, email, maxItems);
-
+    
+    string menuDisplayChoice;
+    string horizontalLine(90,'_');//This is used just to separate outputs in the console (after each iteration)
+    int loopCount=0;  
     isProgramRunning = true;      
     while (isProgramRunning)
     {
-        cout<<
-        "\n"
-        "Choose from this menu: \n"
-        "1) Print My Info\n"
-        "2) Add An Item\n"
-        "3) Sell An Item\n"
-        "4) Print Items\n"
-        "5) Find an Item by ID\n"
-        "6) Exit\n";
-
+        if(loopCount != 0){
+            cout<<"\n\nDo you want the choice menu to be displayed again? (y/n)     Note: y for yes and n for no\n"
+            "Enter (y/n): ";
+            cin>>menuDisplayChoice;
+            cout<<"\n";
+            while(menuDisplayChoice != "y" && menuDisplayChoice != "Y" && menuDisplayChoice != "n" && menuDisplayChoice != "N"){
+                cout<<"\nInvalid Choice.\n"
+                "Enter (y/n): \n";
+                cin>>menuDisplayChoice;
+            }
+            cout<<horizontalLine<<endl;
+            cout<<"\n";
+        }
         
+        if(loopCount == 0 || menuDisplayChoice == "y" || menuDisplayChoice == "Y"){
+            cout<<
+            "\n"
+            "Choose from this menu: \n"
+            "1) Print My Info\n"
+            "2) Add An Item\n"
+            "3) Sell An Item\n"
+            "4) Print Items\n"
+            "5) Find an Item by ID\n"
+            "6) Exit\n";
+        }
         bool isChoiceValid;
         string choice;
         int readyForUseChoice;
@@ -654,9 +669,8 @@ int main()
                     cin >> itemPrice;
                 }
                 
-                cout<<"Before creation of instance in main, the one that is passed to the function: "<<Item::getCountOfItems()<<endl; //trace
+                
                 Item newItem(itemName, itemQuantity, itemPrice);
-                cout<<"After creation of instance in main, the one that is passed to the function: "<<Item::getCountOfItems()<<endl;  //trace
 
                 isExecutedCorrectly = seller.addAnItem(newItem);
 
@@ -784,7 +798,8 @@ int main()
             
         }
         
-    
+        cout<<horizontalLine<<endl;
+        loopCount++;
 
         }
     
