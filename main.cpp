@@ -1,9 +1,5 @@
 /*
-    Authors: 1- Youssef Mohamed Emam, 20205031, SG1
-             2- Mostafa Ibrahim Abdellatif, 20205006, SG1
-
-    Purpose:    This program is an online shopping system. The user enters his info then he/she is prompted to add or sell items,
-              search for a specific item by id, print all items, print his/her info.
+    Authors: Mostafa Ibrahim , Youssef Emam
 */
 
 #include <iostream>
